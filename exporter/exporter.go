@@ -211,7 +211,7 @@ func NewRedisExporter(redisURI string, opts Options) (*Exporter, error) {
 			// # Stats
 			"pubsub_channels":         "pubsub_channels",
 			"pubsub_patterns":         "pubsub_patterns",
-			"pubsubshard_channels":    "pubsubshard_channels",  // Added in Redis 7.0.3
+			"pubsubshard_channels":    "pubsubshard_channels", // Added in Redis 7.0.3
 			"latest_fork_usec":        "latest_fork_usec",
 			"tracking_total_keys":     "tracking_total_keys",
 			"tracking_total_items":    "tracking_total_items",
@@ -373,7 +373,8 @@ func NewRedisExporter(redisURI string, opts Options) (*Exporter, error) {
 		"master_sync_in_progress":                      {txt: "Master sync in progress", lbls: []string{"master_host", "master_port"}},
 		"number_of_distinct_key_groups":                {txt: `Number of distinct key groups`, lbls: []string{"db"}},
 		"script_result":                                {txt: "Result of the collect script evaluation", lbls: []string{"filename"}},
-		"script_values":                                {txt: "Values returned by the collect script", lbls: []string{"key", "filename"}},
+		"script_values":                                {txt: "Values returned by the collect script", lbls: []string{"key", "filename", "fm"}},
+		"script_values_as_string":                      {txt: "Values returned by the collect script as string", lbls: []string{"key", "filename", "val", "fm"}},
 		"sentinel_master_ok_sentinels":                 {txt: "The number of okay sentinels monitoring this master", lbls: []string{"master_name", "master_address"}},
 		"sentinel_master_ok_slaves":                    {txt: "The number of okay slaves of the master", lbls: []string{"master_name", "master_address"}},
 		"sentinel_master_sentinels":                    {txt: "The number of sentinels monitoring this master", lbls: []string{"master_name", "master_address"}},
