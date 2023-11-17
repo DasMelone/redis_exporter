@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -74,6 +75,56 @@ func (e *Exporter) extractLuaScriptMetrics(ch chan<- prometheus.Metric, c redis.
 				"NONE": 3,
 			}
 			e.registerAsValue(ch, enum[stringVal], "lobby:visibility", filename, fm)
+			continue
+		} else if key == "metrics:players:chatmode" {
+			enum := map[string]float64{
+				"SHOWN":         1,
+				"COMMANDS_ONLY": 2,
+				"HIDDEN":        3,
+			}
+			e.registerAsValue(ch, enum[stringVal], "metrics:players:chatmode", filename, fm)
+			continue
+		} else if key == "metrics:players:locale" {
+			enum := map[string]float64{
+				"en_US": 1,
+				"de_DE": 2,
+			}
+			locale, ok := enum[stringVal]
+			if !ok {
+				locale = 0 // Zero for unknown locale
+			}
+			e.registerAsValue(ch, locale, "metrics:players:locale", filename, fm)
+			continue
+		} else if key == "metrics:players:server" {
+			enum := map[string]float64{
+				"Lobby":    1,
+				"Survival": 2,
+				"KFFA-1":   3,
+				"Spread-1": 4,
+				"Spread-2": 5,
+				"Spread-3": 6,
+			}
+			e.registerAsValue(ch, enum[stringVal], "metrics:players:server", filename, fm)
+			continue
+		} else if key == "metrics:players:version:name" {
+			cleanedString := strings.ReplaceAll(stringVal, ".", "")
+
+			result, err := strconv.ParseFloat(cleanedString, 64)
+			if err != nil {
+				fmt.Println("Error:", err)
+				continue
+			}
+			e.registerAsValue(ch, result, "metrics:players:version:name", filename, fm)
+			continue
+		} else if key == "players:chat:target" {
+			enum := map[string]float64{
+				"NORMAL": 1,
+				"TEAM":   2,
+				"ADMIN":  3,
+			}
+			e.registerAsValue(ch, enum[stringVal], "players:chat:target", filename, fm)
+			continue
+		} else if strings.HasPrefix(key, "metrics:players:ip") || strings.HasPrefix(key, "metrics:players:labymod") || strings.HasPrefix(key, "moderation") { //TODO labymod zahlenwerte dürfen nicht ignoriert werden
 			continue
 		}
 
