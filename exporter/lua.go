@@ -124,7 +124,7 @@ func (e *Exporter) extractLuaScriptMetrics(ch chan<- prometheus.Metric, c redis.
 			}
 			e.registerAsValue(ch, enum[stringVal], "players:chat:target", filename, fm)
 			continue
-		} else if strings.HasPrefix(key, "metrics:players:ip") || strings.HasPrefix(key, "metrics:players:labymod") || strings.HasPrefix(key, "moderation") { //TODO labymod zahlenwerte dürfen nicht ignoriert werden
+		} else if strings.HasPrefix(key, "metrics:players:ip") || strings.HasPrefix(key, "metrics:players:labymod") || strings.HasPrefix(key, "moderation") || strings.HasPrefix(key, "metrics:players:modded") || key == "metrics:players:version:brand" || key == "metrics:players:name" {
 			continue
 		}
 
@@ -158,11 +158,11 @@ func (e *Exporter) registerAsValue(ch chan<- prometheus.Metric, val float64, key
 }
 
 func (e *Exporter) registerAsString(ch chan<- prometheus.Metric, val string, key string, filename string, fm string) {
-	if fm != "" {
+	/* if fm != "" {
 		e.registerConstMetricGauge(ch, "script_values_as_string", 1.0, key, filename, val, fm)
 	} else {
 		e.registerConstMetricGauge(ch, "script_values_as_string", 1.0, key, filename, val)
-	}
+	} */
 }
 
 func parseJSON(jsonStr string) (map[string]interface{}, error) {
