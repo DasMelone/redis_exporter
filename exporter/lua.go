@@ -132,6 +132,10 @@ func (e *Exporter) extractLuaScriptMetrics(ch chan<- prometheus.Metric, c redis.
 			// Only record value metric if value is float-y
 			e.registerAsValue(ch, val, key, filename, fm)
 		} else {
+			if key == "weather:skip" {
+				log.Errorf("weather:skip failed to parse as float: %v", err)
+			}
+
 			// if it's not float-y then we'll try to interprete the value as a float
 			if stringVal == "true" {
 				val := 1.0
